@@ -12,6 +12,10 @@
 
 # testing
 /coverage
+test-auth.js
+test-databases.js
+test-stock-db.js
+find-existing-auth-data.js
 
 # next.js
 /.next/

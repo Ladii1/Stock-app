@@ -3,11 +3,16 @@ import CountrySelectField from '@/components/CountrySelectField'
 import FooterLink from '@/components/FooterLink'
 import InputField from '@/components/InputField'
 import SelectField from '@/components/SelectField'
+import { signUpWithEmail } from '@/lib/actions/auth.actions'
 import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from '@/lib/constants'
+import { useRouter } from 'next/navigation'
 import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'  
+import { toast } from 'sonner'
 
 const SignUp = () => {
+
+  const router = useRouter();
 
    const {
     register,
@@ -28,9 +33,11 @@ const SignUp = () => {
   
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     try {
-      console.log(data)
+      const result = await signUpWithEmail(data)
+      if (result.success) router.push('/')
     } catch (error) {
       console.error(error)
+      toast.error('An error occurred during sign up. Please try again.')
     }
   }
 
@@ -62,7 +69,7 @@ const SignUp = () => {
           type='password'
           register={register} 
           error={errors.password}
-          validation={{ required: 'Password is required', minLength: { value: 12, message: 'Password must be at least 8 characters' } }}
+          validation={{ required: 'Password is required', minLength: { value: 8, message: 'Password must be at least 8 characters' } }}
         />
 
         <CountrySelectField 

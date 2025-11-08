@@ -3,8 +3,14 @@ import FooterLink from '@/components/FooterLink'
 import InputField from '@/components/InputField'
 import React from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'  
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
+import { signInWithEmail } from '@/lib/actions/auth.actions'
+
 
 const SignIn = () => {
+
+  const router = useRouter();
 
    const {
     register,
@@ -23,12 +29,14 @@ const SignIn = () => {
     }, mode: 'onBlur',
   })
   
-  const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
+  const onSubmit: SubmitHandler<SignInFormData> = async (data) => {
     try {
-      console.log(data)
-    } catch (error) {
-      console.error(error)
-    }
+          const result = await signInWithEmail(data)
+          if (result.success) router.push('/')
+        } catch (error) {
+          console.error(error)
+          toast.error('An error occurred during Login. Please try again.')
+        }
   }
 
   return (
@@ -51,7 +59,7 @@ const SignIn = () => {
           type='password'
           register={register} 
           error={errors.password}
-          validation={{ required: 'Password is required', minLength: 6 }}
+          validation={{ required: 'Password is required', minLength: 8 }}
         />
 
         

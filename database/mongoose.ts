@@ -32,8 +32,9 @@ export async function connectToDatabase() {
         cached.conn = await cached.promise;
     } catch (error) {
         cached.promise = null;
-        throw error;
+        throw error; 
     }
 
     console.log(`Connected to datatbase ${process.env.NODE_ENV} - ${MONGODB_URI}`);
+    return cached.conn;
 }
